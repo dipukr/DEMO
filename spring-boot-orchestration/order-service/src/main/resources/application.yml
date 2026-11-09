@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:h2:mem:orderdb
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  mvc:
+    problemdetails:
+      enabled: true
+
+saga:
+  # Where the orchestrator sends its commands
+  participants:
+    inventory-url: http://localhost:8081
+    payment-url: http://localhost:8082
+    shipping-url: http://localhost:8083
+  http:
+    connect-timeout: 2s
+    read-timeout: 5s
+  # Compensations must eventually succeed, so they are retried
+  compensation:
+    max-attempts: 3
+    backoff: 500ms
